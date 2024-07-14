@@ -2,3 +2,4 @@ credentials.json
 venv/
 unread_emails.json
 token.json
+analyze.ipynb
