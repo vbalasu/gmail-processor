@@ -1,7 +1,5 @@
 import os.path
 import json
-import base64
-import re
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -11,13 +9,10 @@ from googleapiclient.discovery import build
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 def main():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
+    """Fetches all unread emails' envelope information and saves it as JSON."""
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
+    # created automatically when the authorization flow completes for the first time.
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
@@ -34,15 +29,16 @@ def main():
 
     service = build('gmail', 'v1', credentials=creds)
 
-    # Call the Gmail API
-    results = service.users().messages().list(userId='me', q='is:unread').execute()
-    messages = results.get('messages', [])
-
     email_data = []
+    page_token = None
 
-    if not messages:
-        print('No unread messages found.')
-    else:
+    ctr = 0
+    while True:
+        # Call the Gmail API to fetch unread messages
+        results = service.users().messages().list(userId='me', q='is:unread category:primary', pageToken=page_token).execute()
+        messages = results.get('messages', [])
+        page_token = results.get('nextPageToken')
+
         for message in messages:
             msg = service.users().messages().get(userId='me', id=message['id']).execute()
             headers = msg['payload']['headers']
@@ -59,9 +55,15 @@ def main():
                 if header['name'] == 'Date':
                     email_info['date'] = header['value']
             email_data.append(email_info)
+            ctr = ctr + 1; print(ctr, email_info)
+
+        if not page_token:
+            break
 
     with open('unread_emails.json', 'w') as outfile:
         json.dump(email_data, outfile, indent=4)
+
+    print(f'Successfully saved {len(email_data)} unread emails to unread_emails.json.')
 
 if __name__ == '__main__':
     main()
