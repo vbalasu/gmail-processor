@@ -57,21 +57,21 @@ Here is a sample `unread_emails.json` file:
         "from": "example.sender@gmail.com",
         "to": "your.email@gmail.com",
         "subject": "Meeting Reminder",
-        "date": "Mon, 14 Jul 2024 09:30:00 -0700"
+        "date": "2024-07-14T15:26:25-06:00"
     },
     {
         "id": "176b29a1c34a9a3f",
         "from": "newsletter@news.com",
         "to": "your.email@gmail.com",
         "subject": "Weekly Newsletter",
-        "date": "Sun, 13 Jul 2024 16:00:00 -0700"
+        "date": "2024-07-14T08:22:10+00:00"
     },
     {
         "id": "176b29a1c34a9a40",
         "from": "friend@example.com",
         "to": "your.email@gmail.com",
         "subject": "Let's catch up!",
-        "date": "Fri, 11 Jul 2024 18:45:00 -0700"
+        "date": "2024-07-14T00:48:19-07:00"
     }
 ]
 ```
