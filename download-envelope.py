@@ -4,10 +4,20 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from datetime import datetime
+from dateutil import parser
+from termcolor import colored
 
 # If modifying these SCOPES, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
+def to_iso(date_string):
+    try:
+        output_date = parser.parse(date_string)
+        return output_date.isoformat()
+    except ValueError:
+        return None
+    
 def main():
     """Fetches all unread emails' envelope information and saves it as JSON."""
     creds = None
@@ -53,7 +63,8 @@ def main():
                 if header['name'] == 'Subject':
                     email_info['subject'] = header['value']
                 if header['name'] == 'Date':
-                    email_info['date'] = header['value']
+                    print(colored(header['value'], 'yellow'))
+                    email_info['date'] = to_iso(header['value'])
             email_data.append(email_info)
             ctr = ctr + 1; print(ctr, email_info)
 
