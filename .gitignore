@@ -3,3 +3,5 @@ venv/
 unread_emails.json
 token.json
 analyze.ipynb
+data/
+.DS_Store

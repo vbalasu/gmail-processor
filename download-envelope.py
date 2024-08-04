@@ -71,7 +71,7 @@ def main():
         if not page_token:
             break
 
-    with open('unread_emails.json', 'w') as outfile:
+    with open('data/unread_emails.json', 'w') as outfile:
         json.dump(email_data, outfile, indent=4)
 
     print(f'Successfully saved {len(email_data)} unread emails to unread_emails.json.')
